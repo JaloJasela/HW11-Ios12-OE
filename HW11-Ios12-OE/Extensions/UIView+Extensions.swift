@@ -4,7 +4,6 @@
 //
 //  Created by JaloJasela on 11.02.2024.
 //
-
 import UIKit
 
 extension UIView {
@@ -30,7 +29,6 @@ extension UITextField {
         let iconView = UIImageView(frame: CGRect(x: 100, y: 5, width: 20, height: 20))
         iconView.tintColor = color
         iconView.image = image
-        
         let iconContainerView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 130, height: 30))
         iconContainerView.addSubview(iconView)
         rightView = iconContainerView
@@ -40,10 +38,8 @@ extension UITextField {
                             
 extension UITextField {
     func attributedText(string: String) {
-                
          let attributedArray: [NSAttributedString.Key : Any] = [
             NSAttributedString.Key.foregroundColor: UIColor.green]
-                
         _ = NSAttributedString(string: string, attributes: attributedArray)
     }
 }
@@ -52,7 +48,6 @@ extension ViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
         switch reason {
         case .committed: print(textField.text as Any)
-            
         @unknown default:
             fatalError("...")
         }

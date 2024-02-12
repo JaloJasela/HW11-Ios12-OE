@@ -24,20 +24,19 @@ class ViewController: UIViewController {
         return label
     }()
     
-    // Email or username input field
-    lazy var emailTextField: UITextField = {
+    open lazy var emailTextField: UITextField = {
         let emailTextField = UITextField()
         emailTextField.placeholder = "Email&Username"
         emailTextField.borderStyle = .roundedRect
         emailTextField.setLeftIcon(image: UIImage(systemName: "person") ?? UIImage(), color: UIColor.gray)
         emailTextField.setRightIcon(image: UIImage(systemName: "checkmark.circle.fill") ?? UIImage(), color: UIColor.green)
+        emailTextField.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
         emailTextField.translatesAutoresizingMaskIntoConstraints = false
         emailTextField.delegate = self
         return emailTextField
     }()
 
-    // Password input field
-    lazy var passwordTextField: UITextField = {
+    open lazy var passwordTextField: UITextField = {
         let passwordTextField = UITextField()
         passwordTextField.placeholder = "Password"
         passwordTextField.borderStyle = .roundedRect
@@ -48,8 +47,7 @@ class ViewController: UIViewController {
         return passwordTextField
     }()
 
-    // Login button
-     lazy var loginButton: UIButton = {
+    private lazy var loginButton: UIButton = {
         let loginButton = UIButton()
         loginButton.setTitle("Login", for: .normal)
         loginButton.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
@@ -67,14 +65,93 @@ class ViewController: UIViewController {
         return loginButton
     }()
     
-    private lazy var textButton: UIButton = {
-        let textButton = UIButton()
-        textButton.setTitle("Forgot your password?", for: .normal)
-        textButton.setTitleColor(UIColor.systemPurple, for: .normal)
-        textButton.titleLabel?.font = UIFont(name: "Avenir-Next", size: 12)
-        textButton.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .bold)
-        textButton.translatesAutoresizingMaskIntoConstraints = false
-        return textButton
+    private lazy var textLabel: UILabel = {
+       let textLabel = UILabel()
+        textLabel.text = "Forgot your password?"
+        textLabel.font = UIFont.systemFont(ofSize: 12, weight: .heavy)
+        textLabel.textColor = .systemPurple
+        textLabel.translatesAutoresizingMaskIntoConstraints = false
+        textLabel.numberOfLines = 1
+        return textLabel
+    }()
+    
+    private lazy var line: UIView = {
+        let line = UIView()
+        line.backgroundColor = .systemGray4
+        line.translatesAutoresizingMaskIntoConstraints = false
+        return line
+    }()
+    
+    private lazy var textAndLine: UILabel = {
+       let textAndLine = UILabel()
+        textAndLine.text = "or connect with"
+        textAndLine.font = UIFont.systemFont(ofSize: 12, weight: .light)
+        textAndLine.backgroundColor = .white
+        textAndLine.textColor = .systemPurple
+        textAndLine.textAlignment = .center
+        textAndLine.translatesAutoresizingMaskIntoConstraints = false
+        textAndLine.numberOfLines = 1
+        return textAndLine
+    }()
+    
+    private lazy var stack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [buttonLeft, buttonRight])
+        stack.axis = .horizontal
+        stack.spacing = 20
+        stack.alignment = .center
+        stack.distribution = .fillEqually
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+    
+    private lazy var buttonLeft: UIButton = {
+        let buttonLeft = UIButton()
+        buttonLeft.setTitle("Facebook", for: .normal)
+        buttonLeft.setImage(UIImage(named: "facebook")?.withRenderingMode(.automatic), for: .normal)
+        buttonLeft.imageView?.contentMode = .scaleToFill
+        buttonLeft.imageEdgeInsets = UIEdgeInsets(top: 7, left: 10, bottom: 7, right: 100)
+        buttonLeft.setTitleColor(.white, for: .normal)
+        buttonLeft.backgroundColor = .systemBlue
+        buttonLeft.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        buttonLeft.layer.cornerRadius = 15
+        buttonLeft.configuration?.imagePadding = 0
+        buttonLeft.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+        buttonLeft.translatesAutoresizingMaskIntoConstraints = false
+        return buttonLeft
+    }()
+    
+    private lazy var buttonRight: UIButton = {
+        let buttonRight = UIButton()
+        buttonRight.setTitle("Twitter", for: .normal)
+        buttonRight.setImage(UIImage(named: "twitter")?.withRenderingMode(.automatic), for: .normal)
+        buttonRight.imageView?.contentMode = .scaleToFill
+        buttonRight.imageEdgeInsets = UIEdgeInsets(top: 7, left: 15, bottom: 7, right: 100)
+        buttonRight.setTitleColor(.white, for: .normal)
+        buttonRight.backgroundColor = .systemIndigo
+        buttonRight.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        buttonRight.layer.cornerRadius = 15
+        buttonRight.configuration?.imagePadding = 0
+        buttonRight.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+        buttonRight.translatesAutoresizingMaskIntoConstraints = false
+        return buttonRight
+    }()
+    
+    private lazy var dontAccountText: UITextField = {
+        let dontAccountText = UITextField()
+        dontAccountText.text = "Don't have account?"
+        dontAccountText.textColor = .systemPurple
+        dontAccountText.font = UIFont.systemFont(ofSize: 12, weight: .light)
+        dontAccountText.translatesAutoresizingMaskIntoConstraints = false
+        return dontAccountText
+    }()
+
+    private lazy var signUpText: UITextField = {
+        let signUpText = UITextField()
+        signUpText.text = "Sign up"
+        signUpText.textColor = .systemIndigo
+        signUpText.font = UIFont.systemFont(ofSize: 12, weight: .heavy)
+        signUpText.translatesAutoresizingMaskIntoConstraints = false
+        return signUpText
     }()
     
     // MARK: - Lifcycle
@@ -87,14 +164,15 @@ class ViewController: UIViewController {
     }
     
     // MARK: - Setups
-    // добавление клавиатуры на view
+    
      private func createGesture() {
          let gesture = UITapGestureRecognizer(target: self, action: #selector(viewTapped))
          view.addGestureRecognizer(gesture)
      }
     
     private func setupHierarchy() {
-        view.addSubViews([imageView, label, emailTextField, passwordTextField, loginButton, textButton])
+        view.addSubViews([imageView, label, emailTextField, passwordTextField, loginButton, textLabel, line, textAndLine, dontAccountText, signUpText])
+        view.addSubview(stack)
     }
     
     private func setupLayout() {
@@ -115,25 +193,53 @@ class ViewController: UIViewController {
             emailTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -70),
             
             label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: emailTextField.topAnchor, constant: -60),
+            label.centerYAnchor.constraint(equalTo: emailTextField.topAnchor, constant: -100),
             
             passwordTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             passwordTextField.centerYAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 20),
             passwordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 70),
             passwordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -70),
             
-            textButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            textButton.centerYAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 20),
+            textLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            textLabel.centerYAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 20),
             
-        ])
-    }
+            line.heightAnchor.constraint(equalToConstant: 1),
+            line.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            line.bottomAnchor.constraint(equalTo: stack.topAnchor, constant: -30),
+            line.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            line.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
+            
+            stack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            stack.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -80),
+            stack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+       
+            buttonLeft.heightAnchor.constraint(equalToConstant: 50),
+            buttonLeft.topAnchor.constraint(equalTo: stack.topAnchor, constant: 20),
+            
+            buttonRight.heightAnchor.constraint(equalToConstant: 50),
+            buttonRight.topAnchor.constraint(equalTo: stack.topAnchor, constant: 20),
+            
+            textAndLine.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            textAndLine.heightAnchor.constraint(equalToConstant: 13),
+            textAndLine.widthAnchor.constraint(equalToConstant: 150),
+            textAndLine.centerYAnchor.constraint(equalTo: line.centerYAnchor, constant: 0.0),
+            
+            dontAccountText.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -20),
+            dontAccountText.centerYAnchor.constraint(equalTo: buttonLeft.bottomAnchor, constant: 35),
+            
+            signUpText.leadingAnchor.constraint(equalTo: dontAccountText.trailingAnchor, constant: 15),
+            signUpText.centerYAnchor.constraint(equalTo: buttonRight.bottomAnchor, constant: 35)
+    ])
+}
+
     // MARK: - Actions
     
     @objc private func buttonTapped() {
         let viewController = NextViewController()
         navigationController?.pushViewController(viewController, animated: true)
     }
-   //  скрытие клавиатуры
+
     @objc private func viewTapped() {
         view.endEditing(true)
     }
